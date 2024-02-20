@@ -21,30 +21,33 @@ print(height,width ,sep="\t")
 
 print("Start")
 a=0
-for i in range(int(len(message_bin)/height)+1):
-    for j in range(width):
+if len(message_bin) <= width*height:
+    for i in range(int(len(message_bin)/height)+1):
+        for j in range(width):
         
-        r,g,b = pic[i,j]
+            r,g,b = pic[i,j]
 
-        #print("First color: ", r,g,b, sep="\t")
-        #print(a,len(message_bin), sep="\t")
-        if message_bin[a] == '1':
-            b = b | 1<<0
+            #print("First color: ", r,g,b, sep="\t")
+            #print(a,len(message_bin), sep="\t")
+            if message_bin[a] == '1':
+                b = b | 1<<0
+            else:
+                b = b & ~(1<<0)
+        
+            #print("Second color", r,g,b, sep="\t")
+            pic[i,j] = r,g,b
+
+            #print("pic pixel w petli: ",pic[i,j])
+            a=a+1
+            if a == len(message_bin):
+            #print("rowne",a,len(message_bin), sep="\t")
+                break;
         else:
-            b = b & ~(1<<0)
-        
-        #print("Second color", r,g,b, sep="\t")
-        pic[i,j] = r,g,b
+            continue  # only executed if the inner loop did NOT break
+        break
 
-        #print("pic pixel w petli: ",pic[i,j])
-        a=a+1
-        if a == len(message_bin):
-          #print("rowne",a,len(message_bin), sep="\t")
-          break;
-    else:
-        continue  # only executed if the inner loop did NOT break
-    break
-
-print("Done")
+    print("Done")
+else:
+    print("image to small or message to big")
 #print("drugi pic pixel poza petla: ", pic[0,0])
 cv2.imwrite(image+"_rev.bmp", pic)
